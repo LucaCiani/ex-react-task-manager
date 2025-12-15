@@ -1,7 +1,7 @@
 export default function TaskListPage() {
     return (
         <>
-            <h2>Task List</h2>
+            <h2>Lista Tasks</h2>
         </>
     );
 }

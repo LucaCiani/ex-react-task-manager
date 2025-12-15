@@ -1,7 +1,7 @@
 export default function AddListPage() {
     return (
         <>
-            <h2>Add List</h2>
+            <h2>Aggiungi Task</h2>
         </>
     );
 }
