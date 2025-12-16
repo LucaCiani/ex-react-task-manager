@@ -6,7 +6,7 @@ import { BrowserRouter, NavLink, Route, Routes } from "react-router-dom";
 import HomePage from "./assets/pages/HomePage";
 import TaskListPage from "./assets/pages/TaskListPage";
 import AddListPage from "./assets/pages/AddListPage";
-import { GlobalProvider } from "./assets/GlobalContext";
+import { GlobalProvider } from "./GlobalContext";
 
 function App() {
     return (

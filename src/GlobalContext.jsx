@@ -1,17 +1,17 @@
 import { createContext, useEffect, useState } from "react";
 
-export const GlobalContext = createContext();
+const GlobalContext = createContext();
 
-const { VITE_API_URL } = import.meta.env;
+const tasksApiUrl = `${import.meta.env.VITE_API_URL}/tasks`;
 
-export function GlobalProvider({ children }) {
+function GlobalProvider({ children }) {
     const [tasks, setTasks] = useState([]);
 
     useEffect(() => {
-        fetch(`${VITE_API_URL}/tasks`)
-            .then((res) => res.json)
+        fetch(tasksApiUrl)
+            .then((res) => res.json())
             .then((data) => setTasks(data))
-            .catch((err) => console.error(err));
+            .catch((error) => console.error(error));
     }, []);
 
     return (
@@ -20,3 +20,5 @@ export function GlobalProvider({ children }) {
         </GlobalContext.Provider>
     );
 }
+
+export { GlobalContext, GlobalProvider };
