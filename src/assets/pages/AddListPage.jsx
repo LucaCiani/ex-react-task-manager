@@ -1,7 +1,7 @@
 export default function AddListPage() {
     return (
         <>
-            <h2>Aggiungi Task</h2>
+            <h2 className="py-3 text-center">Aggiungi Task</h2>
         </>
     );
 }
