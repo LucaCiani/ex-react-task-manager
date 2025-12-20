@@ -1,35 +1,9 @@
-import { memo, useContext } from "react";
+import { useContext } from "react";
 import { GlobalContext } from "../../GlobalContext";
+import TaskRow from "../components/TaskRow";
 
 export default function TaskListPage() {
     const { tasks } = useContext(GlobalContext);
-
-    const ShowTasks = memo(() => {
-        return (
-            <>
-                {tasks.map((task) => {
-                    return (
-                        <tr key={task.id}>
-                            <th scope="row">{task.id}</th>
-                            <td>{task.title}</td>
-                            <td
-                                className={
-                                    task.status === "To do"
-                                        ? "table-danger"
-                                        : task.status === "Doing"
-                                        ? "table-warning"
-                                        : "table-success"
-                                }
-                            >
-                                {task.status}
-                            </td>
-                            <td>{task.createdAt.slice(0, 10)}</td>
-                        </tr>
-                    );
-                })}
-            </>
-        );
-    });
 
     return (
         <>
@@ -45,7 +19,9 @@ export default function TaskListPage() {
                         </tr>
                     </thead>
                     <tbody>
-                        <ShowTasks />
+                        {tasks.map((task) => (
+                            <TaskRow key={task.id} task={task} />
+                        ))}
                     </tbody>
                 </table>
             </div>
