@@ -5,7 +5,7 @@ import "bootstrap/dist/js/bootstrap.bundle.min";
 import { BrowserRouter, NavLink, Route, Routes } from "react-router-dom";
 import HomePage from "./assets/pages/HomePage";
 import TaskListPage from "./assets/pages/TaskListPage";
-import AddListPage from "./assets/pages/AddListPage";
+import AddTaskPage from "./assets/pages/AddTaskPage";
 import { GlobalProvider } from "./GlobalContext";
 
 function App() {
@@ -57,7 +57,7 @@ function App() {
                     <Routes>
                         <Route path="/" Component={HomePage} />
                         <Route path="task-list" Component={TaskListPage} />
-                        <Route path="add-task" Component={AddListPage} />
+                        <Route path="add-task" Component={AddTaskPage} />
                     </Routes>
                 </BrowserRouter>
             </GlobalProvider>
