@@ -12,7 +12,17 @@ export default function useTasks() {
             .catch((error) => console.error(error));
     }, []);
 
-    const addTask = () => {};
+    const addTask = async (newTask) => {
+        const res = await fetch(tasksApiUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(newTask),
+        });
+        const { success, message, task } = await res.json();
+        if (!success) throw new Error(message);
+
+        setTasks((prev) => [...prev, task]);
+    };
 
     const removeTask = () => {};
 

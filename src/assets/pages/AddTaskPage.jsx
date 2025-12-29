@@ -1,8 +1,11 @@
-import { useMemo, useRef, useState } from "react";
+import { useContext, useMemo, useRef, useState } from "react";
+import { GlobalContext } from "../../GlobalContext";
 
 const symbols = "!@#$%^&*()-_=+[]{}|;:'\",.<>?/`~";
 
 export default function AddTaskPage() {
+    const { addTask } = useContext(GlobalContext);
+
     const [taskTitle, setTaskTitle] = useState("");
     const descriptionRef = useRef();
     const statusRef = useRef();
@@ -17,7 +20,7 @@ export default function AddTaskPage() {
         return "";
     }, [taskTitle]);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (taskTitleError) {
             return;
@@ -29,7 +32,15 @@ export default function AddTaskPage() {
             status: statusRef.current.value,
         };
 
-        console.log(newTask);
+        try {
+            await addTask(newTask);
+            alert("Task creata!");
+            setTaskTitle("");
+            descriptionRef.current.value = "";
+            statusRef.current.value = "";
+        } catch (error) {
+            alert(error.message);
+        }
     };
     return (
         <>

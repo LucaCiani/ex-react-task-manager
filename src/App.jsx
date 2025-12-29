@@ -7,6 +7,7 @@ import HomePage from "./assets/pages/HomePage";
 import TaskListPage from "./assets/pages/TaskListPage";
 import AddTaskPage from "./assets/pages/AddTaskPage";
 import { GlobalProvider } from "./GlobalContext";
+import TaskDetailPage from "./assets/pages/TaskDetailPage";
 
 function App() {
     return (
@@ -58,6 +59,10 @@ function App() {
                         <Route path="/" Component={HomePage} />
                         <Route path="task-list" Component={TaskListPage} />
                         <Route path="add-task" Component={AddTaskPage} />
+                        <Route
+                            path="task-list/:id"
+                            Component={TaskDetailPage}
+                        />
                     </Routes>
                 </BrowserRouter>
             </GlobalProvider>
