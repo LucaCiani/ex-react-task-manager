@@ -1,6 +1,7 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { GlobalContext } from "../../GlobalContext";
 import { useNavigate, useParams } from "react-router-dom";
+import Modal from "../components/Modal";
 
 export default function TaskDetailPage() {
     const { tasks, removeTask } = useContext(GlobalContext);
@@ -8,6 +9,8 @@ export default function TaskDetailPage() {
     const navigate = useNavigate();
 
     const singleTask = tasks.find((task) => task.id == parseInt(id));
+
+    const [showModal, setShowModal] = useState(false);
 
     if (!singleTask) {
         return <h2>Task non trovata!</h2>;
@@ -24,6 +27,8 @@ export default function TaskDetailPage() {
         }
     };
 
+    console.log(showModal);
+
     return (
         <>
             <div className="container">
@@ -36,7 +41,7 @@ export default function TaskDetailPage() {
                             </p>
                         )}
                         <p className="card-text">
-                            <b>Stato:</b> {singleTask.description}
+                            <b>Stato:</b> {singleTask.status}
                         </p>
                         <p className="card-text">
                             <b>Data di creazione:</b>{" "}
@@ -45,12 +50,24 @@ export default function TaskDetailPage() {
                             ).toLocaleDateString()}
                         </p>
                         <button
-                            onClick={handleDelete}
+                            onClick={() => {
+                                setShowModal(true);
+                            }}
                             className="btn btn-primary"
                         >
                             Elimina Task
                         </button>
                     </div>
+                    <Modal
+                        title="Conferma Eliminazione"
+                        content={"Sei sicuro di voler eliminare questa task?"}
+                        show={showModal}
+                        onClose={() => {
+                            setShowModal(false);
+                        }}
+                        onConfirm={handleDelete}
+                        confirmText="Elimina"
+                    />
                 </div>
             </div>
         </>
