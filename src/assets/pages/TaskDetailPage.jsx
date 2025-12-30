@@ -2,15 +2,17 @@ import { useContext, useState } from "react";
 import { GlobalContext } from "../../GlobalContext";
 import { useNavigate, useParams } from "react-router-dom";
 import Modal from "../components/Modal";
+import EditTaskModal from "../components/EditTaskModal";
 
 export default function TaskDetailPage() {
-    const { tasks, removeTask } = useContext(GlobalContext);
+    const { tasks, removeTask, updateTask } = useContext(GlobalContext);
     const { id } = useParams();
     const navigate = useNavigate();
 
     const singleTask = tasks.find((task) => task.id == parseInt(id));
 
     const [showModal, setShowModal] = useState(false);
+    const [editModal, setEditModal] = useState(false);
 
     if (!singleTask) {
         return <h2>Task non trovata!</h2>;
@@ -27,7 +29,15 @@ export default function TaskDetailPage() {
         }
     };
 
-    console.log(showModal);
+    const handleUpdate = async (updatedTask) => {
+        try {
+            await updateTask(updatedTask);
+            setEditModal(false);
+        } catch (error) {
+            console.error(error);
+            alert(error.message);
+        }
+    };
 
     return (
         <>
@@ -57,6 +67,14 @@ export default function TaskDetailPage() {
                         >
                             Elimina Task
                         </button>
+                        <button
+                            onClick={() => {
+                                setEditModal(true);
+                            }}
+                            className="btn btn-primary"
+                        >
+                            Modifica Task
+                        </button>
                     </div>
                     <Modal
                         title="Conferma Eliminazione"
@@ -67,6 +85,14 @@ export default function TaskDetailPage() {
                         }}
                         onConfirm={handleDelete}
                         confirmText="Elimina"
+                    />
+                    <EditTaskModal
+                        task={singleTask}
+                        show={editModal}
+                        onClose={() => {
+                            setEditModal(false);
+                        }}
+                        onSave={handleUpdate}
                     />
                 </div>
             </div>
