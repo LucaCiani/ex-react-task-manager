@@ -6,7 +6,15 @@ export default function TaskDetailPage() {
     const { tasks } = useContext(GlobalContext);
     const { id } = useParams();
 
-    const singleTask = tasks.find((task) => task.id == id);
+    const singleTask = tasks.find((task) => task.id == parseInt(id));
+
+    if (!singleTask) {
+        return <h2>Task non trovata!</h2>;
+    }
+
+    const handleDelete = () => {
+        console.log("Elimino la task:", singleTask.id);
+    };
 
     return (
         <>
@@ -28,6 +36,12 @@ export default function TaskDetailPage() {
                                 singleTask.createdAt
                             ).toLocaleDateString()}
                         </p>
+                        <button
+                            onClick={handleDelete}
+                            className="btn btn-primary"
+                        >
+                            Elimina Task
+                        </button>
                     </div>
                 </div>
             </div>
