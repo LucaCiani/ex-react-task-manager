@@ -1,10 +1,11 @@
 import { useContext } from "react";
 import { GlobalContext } from "../../GlobalContext";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function TaskDetailPage() {
-    const { tasks } = useContext(GlobalContext);
+    const { tasks, removeTask } = useContext(GlobalContext);
     const { id } = useParams();
+    const navigate = useNavigate();
 
     const singleTask = tasks.find((task) => task.id == parseInt(id));
 
@@ -12,8 +13,15 @@ export default function TaskDetailPage() {
         return <h2>Task non trovata!</h2>;
     }
 
-    const handleDelete = () => {
-        console.log("Elimino la task:", singleTask.id);
+    const handleDelete = async () => {
+        try {
+            await removeTask(singleTask.id);
+            alert("Task eliminata con successo!");
+            navigate("/task-list");
+        } catch (error) {
+            console.error(error);
+            alert(error.message);
+        }
     };
 
     return (
