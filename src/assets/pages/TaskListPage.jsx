@@ -1,9 +1,22 @@
-import { useContext, useMemo, useState } from "react";
+import { useCallback, useContext, useMemo, useState } from "react";
 import { GlobalContext } from "../../GlobalContext";
 import TaskRow from "../components/TaskRow";
 
+function debounce(callback, delay) {
+    let timer;
+    return (value) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+            callback(value);
+        }, delay);
+    };
+}
+
 export default function TaskListPage() {
     const { tasks } = useContext(GlobalContext);
+
+    const [searchQuery, setSearchQuery] = useState("");
+    const deboucedSearch = useCallback(debounce(setSearchQuery, 500), []);
 
     const [sortBy, setSortBy] = useState("createdAt");
     const [sortOrder, setSortOrder] = useState(1);
@@ -20,33 +33,44 @@ export default function TaskListPage() {
         console.log("Cliccato");
     };
 
-    const sortedTask = useMemo(() => {
-        return [...tasks].sort((a, b) => {
-            let comparison;
+    const filteredAndSortedTasks = useMemo(() => {
+        return [...tasks]
+            .filter((t) => {
+                return t.title
+                    .toLowerCase()
+                    .includes(searchQuery.toLocaleLowerCase());
+            })
+            .sort((a, b) => {
+                let comparison;
 
-            if (sortBy === "id") {
-                comparison = a.id - b.id;
-            } else if (sortBy === "title") {
-                comparison = a.title.localeCompare(b.title);
-            } else if (sortBy === "status") {
-                const statusOptions = ["To Do", "Doing", "Done"];
-                comparison =
-                    statusOptions.indexOf(a.status) -
-                    statusOptions.indexOf(b.status);
-            } else if (sortBy === "createdAt") {
-                const dateA = new Date(a.createdAt).getTime();
-                const dateB = new Date(b.createdAt).getTime();
-                comparison = dateA - dateB;
-            }
+                if (sortBy === "id") {
+                    comparison = a.id - b.id;
+                } else if (sortBy === "title") {
+                    comparison = a.title.localeCompare(b.title);
+                } else if (sortBy === "status") {
+                    const statusOptions = ["To Do", "Doing", "Done"];
+                    comparison =
+                        statusOptions.indexOf(a.status) -
+                        statusOptions.indexOf(b.status);
+                } else if (sortBy === "createdAt") {
+                    const dateA = new Date(a.createdAt).getTime();
+                    const dateB = new Date(b.createdAt).getTime();
+                    comparison = dateA - dateB;
+                }
 
-            return comparison * sortOrder;
-        });
-    }, [tasks, sortBy, sortOrder]);
+                return comparison * sortOrder;
+            });
+    }, [tasks, sortBy, sortOrder, searchQuery]);
 
     return (
         <>
             <div className="container">
                 <h2 className=" py-3 text-center">Lista Tasks</h2>
+                <input
+                    type="text"
+                    placeholder="Cerca per titolo..."
+                    onChange={(e) => deboucedSearch(e.target.value)}
+                />
                 <table className="table">
                     <thead>
                         <tr>
@@ -72,7 +96,7 @@ export default function TaskListPage() {
                         </tr>
                     </thead>
                     <tbody>
-                        {sortedTask.map((task) => (
+                        {filteredAndSortedTasks.map((task) => (
                             <TaskRow key={task.id} task={task} />
                         ))}
                     </tbody>
